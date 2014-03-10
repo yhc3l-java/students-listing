@@ -1,0 +1,9 @@
+@(numberOfPages: Int, currentPage: Int, page: Int => play.api.mvc.Call)
+
+
+
+<ul class="pagination">
+	@for(i <- 0 until numberOfPages){
+		<li><a href="@page(i + 1)">@(i + 1)</a></li>
+	}
+</ul>

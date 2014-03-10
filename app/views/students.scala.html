@@ -1,0 +1,46 @@
+@(orderBy: String, orderDirection: String, numberOfPages: Int, currentPage: Int, students: List[Student])
+
+@orderByLink(name: String, label: String) = {
+ 	<a href="@routes.Application.index(name, "asc", 1)">@label</a>
+ 	
+ 	@if(orderBy == name) { 
+ 		<i class="fa fa-long-arrow-@(
+ 			if(orderDirection == "asc") {
+ 				"up"
+ 			} else {
+ 				"down"
+			}
+		)"></i>
+ 		
+ 		<a class="btn btn-primary btn-xs pull-right" title="Switch order direction" href="@routes.Application.index(orderBy, (if(orderDirection != "asc") "asc" else "desc"), 1)"><i class="fa fa-random"></i></a>
+ 	}
+}
+
+@main("Listing students..."){
+	<h1><i class="fa fa-group" style="color: #aaa;"></i> Listing students</h1>
+	
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th width="25%">@orderByLink("id", "#")</th>
+				<th width="25%">@orderByLink("name", "Name")</th>
+				<th width="25%">@orderByLink("surname", "Surname")</th>
+				<th width="25%">@orderByLink("icon", "Icon")</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for(p <- students) {
+				<tr>
+					<th>@p.id</th>
+					<td>@p.name</td>
+					<td>@p.surname</td>
+					<td><code>@p.icon</code> <i class="fa fa-@p.icon fa-2x"></i></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	
+	@defining(routes.Application.index(orderBy, orderDirection, _:Int)) { page =>
+ 		@pagination(numberOfPages, currentPage, page)
+    }
+}
